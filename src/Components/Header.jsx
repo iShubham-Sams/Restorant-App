@@ -113,10 +113,20 @@ const logout=()=>{
 
       {/* for mobile */}
       <div className="flex md:hidden items-center justify-between w-full h-full ">
+
+      <div>
+            <FiShoppingCart className="text-textColor text-2xl ml-8" />
+            <div className="h-5 w-5 -mt-10 ml-9  rounded-full items-center justify-center flex bg-red-500 absolute">
+              <p className="text-white ">2</p>
+            </div>
+          </div>
+
       <Link to="/" className="flex justify-center items-center gap-2">
           <img src={logo} className=" bg-cover w-8 " alt="this is logo" />
           <p className="text-headingColor text-xl font-bold">City</p>
         </Link>
+
+  
 
 
         <div className="relative">
