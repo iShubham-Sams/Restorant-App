@@ -57,16 +57,16 @@ const logout=()=>{
            exit={{opacity:0,x:200}}
            
            className="flex justify-center items-center  gap-8">
-            <li className="text-base text-textColor hover:text-headingColor duration-100 ease-in-out transition-all cursor-pointer">
+            <li className="text-base text-textColor hover:text-headingColor duration-100 ease-in-out transition-all cursor-pointer "onClick={()=>setIsMenu(false)}>
               Home
             </li>
-            <li className="text-base text-textColor hover:text-headingColor duration-100 ease-in-out transition-all cursor-pointer">
+            <li className="text-base text-textColor hover:text-headingColor duration-100 ease-in-out transition-all cursor-pointer "onClick={()=>setIsMenu(false)}>
               Menu
             </li>
-            <li className="text-base text-textColor hover:text-headingColor duration-100 ease-in-out transition-all cursor-pointer">
+            <li className="text-base text-textColor hover:text-headingColor duration-100 ease-in-out transition-all cursor-pointer "onClick={()=>setIsMenu(false)}>
               About Us
             </li>
-            <li className="text-base text-textColor hover:text-headingColor duration-100 ease-in-out transition-all cursor-pointer">
+            <li className="text-base text-textColor hover:text-headingColor duration-100 ease-in-out transition-all cursor-pointer "onClick={()=>setIsMenu(false)}>
               Service
             </li>
           </motion.ul>
@@ -94,7 +94,7 @@ const logout=()=>{
               >
                 {user && user.email == "shubhambhandari12345hb@gmail.com" && (
                   <Link to={"/createItem"}>
-                    <p className="px-4 py-2 flex items-center gap-3 cursor-pointer hover:bg-slate-100 transition-all ease-in-out duration-100">
+                    <p className="px-4 py-2 flex items-center gap-3 cursor-pointer hover:bg-slate-100 transition-all ease-in-out duration-100 "onClick={()=>setIsMenu(false)}>
                       New Item <AiFillFolderAdd className="inline-block" />
                     </p>
                   </Link>
