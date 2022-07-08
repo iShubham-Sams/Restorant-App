@@ -4,6 +4,18 @@ import { categories } from "./utils/Data";
 import { motion } from "framer-motion";
 import Loader from "./loader";
 
+import { getAllFoodItems, saveItem } from "./utils/FirebaseFunctions";
+import { actionType } from "./Context/reducer";
+
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
+
+import { storage } from "../firebase.config";
+
 import {
   MdFastfood,
   MdCloudUpload,
@@ -24,9 +36,123 @@ const CreateContainer = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [{ foodItems }, dispatch] = useStateValue();
 
-  const uploadImage = () => { };
-  const deleteImage = () => { };
-  const saveDetails = () => { };
+  const uploadImage = (e) => {
+    setIsLoading(true);
+    const imageFile = e.target.files[0];
+    const storageRef = ref(storage, `Images/${Date.now()}-${imageFile.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, imageFile);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const uploadProgress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      },
+      (error) => {
+        console.log(error);
+        setFields(true);
+        setMsg("Error while uploading : Try AGain 🙇");
+        setAlertStatus("danger");
+        setTimeout(() => {
+          setFields(false);
+          setIsLoading(false);
+        }, 4000);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setImageAsset(downloadURL);
+          setIsLoading(false);
+          setFields(true);
+          setMsg("Image uploaded successfully 😊");
+          setAlertStatus("success");
+          setTimeout(() => {
+            setFields(false);
+          }, 4000);
+        });
+      }
+    );
+  };
+
+
+
+  const deleteImage = () => {
+    setIsLoading(true);
+    const deleteRef = ref(storage, imageAsset);
+    deleteObject(deleteRef).then(() => {
+      setImageAsset(null);
+      setIsLoading(false);
+      setFields(true);
+      setMsg("Image deleted successfully 😊");
+      setAlertStatus("success");
+      setTimeout(() => {
+        setFields(false);
+      }, 4000);
+    });
+  };
+  const saveDetails = () =>  {
+    setIsLoading(true);
+    try {
+      if (!title || !calories || !imageAsset || !price || !category) {
+        setFields(true);
+        setMsg("Required fields can't be empty");
+        setAlertStatus("danger");
+        setTimeout(() => {
+          setFields(false);
+          setIsLoading(false);
+        }, 4000);
+      } else {
+        const data = {
+          id: `${Date.now()}`,
+          title: title,
+          imageURL: imageAsset,
+          category: category,
+          calories: calories,
+          qty: 1,
+          price: price,
+        };
+        saveItem(data);
+        setIsLoading(false);
+        setFields(true);
+        setMsg("Data Uploaded successfully 😊");
+        setAlertStatus("success");
+        setTimeout(() => {
+          setFields(false);
+        }, 4000);
+        clearData();
+      }
+    } catch (error) {
+      console.log(error);
+      setFields(true);
+      setMsg("Error while uploading : Try AGain 🙇");
+      setAlertStatus("danger");
+      setTimeout(() => {
+        setFields(false);
+        setIsLoading(false);
+      }, 4000);
+    }
+
+    fetchData();
+  };
+
+  const clearData = () => {
+    setTitle("");
+    setImageAsset(null);
+    setCalories("");
+    setPrice("");
+    setCategory("Select Category");
+  };
+
+  const fetchData = async () => {
+    await getAllFoodItems().then((data) => {
+      dispatch({
+        type: actionType.SET_FOOD_ITEMS,
+        foodItems: data,
+      });
+    });
+  };
+
+
+
   return (
     <div className="w-full min-h-screen flex items-center justify-center">
       <div className="w-[90%] md:w-[75%] border border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center gap-4">
@@ -35,10 +161,11 @@ const CreateContainer = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className={`w-full p-2 rounded-lg text-center text-lg font-semibold ${alertStatus === "danger"
+            className={`w-full p-2 rounded-lg text-center text-lg font-semibold ${
+              alertStatus === "danger"
                 ? "bg-red-400 text-red-800"
                 : "bg-emerald-400 text-emerald-800"
-              }`}
+            }`}
           >
             {msg}
           </motion.p>
