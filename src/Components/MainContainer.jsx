@@ -3,36 +3,35 @@ import HomeContainer from "./HomeContainer";
 import { motion } from "framer-motion";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import RowContainer from "./RowContainer";
-import {useStateValue} from './Context/stateProvider'
+import { useStateValue } from "./Context/stateProvider";
 import MenuContainer from "./MenuContainer";
 import CartContainer from "./CartContainer";
 
 const MainContainer = () => {
-  const[{foodItems},dispatch]=useStateValue()
- const [scrollValue,setScrollValue]=useState(0)
-useEffect(()=>{
-  
-},[scrollValue])
+  const [{ foodItems, cartShow }, dispatch] = useStateValue();
+  const [scrollValue, setScrollValue] = useState(0);
+  useEffect(() => {}, [scrollValue]);
 
-const onLeft=()=>{
-  if(scrollValue<-1000){
-    setScrollValue(-1000)
-  }else if(scrollValue>=1000){
-    setScrollValue(0)
-  }
-  else{setScrollValue((scrollValue-200))}
-}
+  const onLeft = () => {
+    if (scrollValue < -1000) {
+      setScrollValue(-1000);
+    } else if (scrollValue >= 1000) {
+      setScrollValue(0);
+    } else {
+      setScrollValue(scrollValue - 200);
+    }
+  };
 
-
-
- const onRight=()=>{
-  if(scrollValue>1000){
-   setScrollValue(1000)
-  }
-  if(scrollValue<0){
-   setScrollValue(0)}
-else{setScrollValue((scrollValue+200))}
-}
+  const onRight = () => {
+    if (scrollValue > 1000) {
+      setScrollValue(1000);
+    }
+    if (scrollValue < 0) {
+      setScrollValue(0);
+    } else {
+      setScrollValue(scrollValue + 200);
+    }
+  };
 
   return (
     <div className="flex h-auto w-full flex-col items-center justify-center ">
@@ -49,21 +48,25 @@ else{setScrollValue((scrollValue+200))}
               className="w-8 h-8 rounded-lg bg-orange-300 hover:bg-orange-500 cursor-pointer transition-all duration-100 ease-in-out hover:shadow-lg flex items-center justify-center"
               onClick={onLeft}
             >
-              <MdChevronLeft className="text-lg text-white"  />
+              <MdChevronLeft className="text-lg text-white" />
             </motion.div>
             <motion.div
               whileTap={{ scale: 0.75 }}
               className="w-8 h-8 rounded-lg bg-orange-300 hover:bg-orange-500 cursor-pointer transition-all duration-100 ease-in-out hover:shadow-lg flex items-center justify-center"
               onClick={onRight}
             >
-              <MdChevronRight className="text-lg text-white"  />
+              <MdChevronRight className="text-lg text-white" />
             </motion.div>
           </div>
         </div>
-        <RowContainer scrollValue={scrollValue}  flag={true} data={foodItems?.filter(n=>n.category==="fruits")}/>
+        <RowContainer
+          scrollValue={scrollValue}
+          flag={true}
+          data={foodItems?.filter((n) => n.category === "fruits")}
+        />
       </section>
-      <MenuContainer/>
-      <CartContainer/>
+      <MenuContainer />
+      {cartShow && <CartContainer />}
     </div>
   );
 };

@@ -13,7 +13,7 @@ import { actionType } from "./Context/reducer";
 const Header = () => {
   const firebaseAuth = getAuth(app);
   const provider = new GoogleAuthProvider();
-  const [{ user }, dispatch] = useStateValue();
+  const [{ user,cartShow }, dispatch] = useStateValue();
   const [isMenu, setIsMenu] = useState(false);
 
   const login = async () => {
@@ -39,6 +39,13 @@ const logout=()=>{
   dispatch({
     type:actionType.SET_USER,
     user:null
+  })
+}
+
+const showCart=()=>{
+  dispatch({
+    type:actionType.SET_CART_SHOW,
+    cartShow:!cartShow,
   })
 }
 
@@ -71,7 +78,7 @@ const logout=()=>{
             </li>
           </motion.ul>
 
-          <div>
+          <div onClick={showCart}>
             <FiShoppingCart className="text-textColor text-2xl ml-8" />
             <div className="h-5 w-5 -mt-10 ml-9  rounded-full items-center justify-center flex bg-red-500 absolute">
               <p className="text-white ">2</p>
@@ -114,7 +121,7 @@ const logout=()=>{
       {/* for mobile */}
       <div className="flex md:hidden items-center justify-between w-full h-full ">
 
-      <div>
+      <div onClick={showCart}>
             <FiShoppingCart className="text-textColor text-2xl ml-8" />
             <div className="h-5 w-5 -mt-10 ml-9  rounded-full items-center justify-center flex bg-red-500 absolute">
               <p className="text-white ">2</p>
