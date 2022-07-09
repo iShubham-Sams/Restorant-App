@@ -5,6 +5,7 @@ import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import RowContainer from "./RowContainer";
 import {useStateValue} from './Context/stateProvider'
 import MenuContainer from "./MenuContainer";
+import CartContainer from "./CartContainer";
 
 const MainContainer = () => {
   const[{foodItems},dispatch]=useStateValue()
@@ -62,6 +63,7 @@ else{setScrollValue((scrollValue+200))}
         <RowContainer scrollValue={scrollValue}  flag={true} data={foodItems?.filter(n=>n.category==="fruits")}/>
       </section>
       <MenuContainer/>
+      <CartContainer/>
     </div>
   );
 };
